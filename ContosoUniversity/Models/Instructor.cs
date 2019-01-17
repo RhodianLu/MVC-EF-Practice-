@@ -12,7 +12,7 @@ namespace ContosoUniversity.Models
         [Display(Name = "Last Name"), StringLength(50, MinimumLength = 1)]
         public string LastName { get; set; }
 
-        [[Column("FirstName"), Display(Name = "First Name"), StringLength(50, MinimumLength = 1)]
+        [Column("FirstName"), Display(Name = "First Name"), StringLength(50, MinimumLength = 1)]
         public string FirstMidName { get; set; }
 
         [DataType(DataType.Date), Display(Name = "Hire Date"), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

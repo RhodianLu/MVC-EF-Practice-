@@ -19,7 +19,8 @@ namespace ContosoUniversity.Controllers
         // GET: Course
         public ActionResult Index()
         {
-            var courses = db.Courses.Include(c => c.Department);
+            var courses = db.Courses;
+            var sql = courses.ToString();
             return View(courses.ToList());
         }
 

@@ -1,6 +1,14 @@
-﻿@{
+﻿@model ContosoUniversity.ViewModels.LoginIndexData
+@{
     ViewBag.Title = "Home Page";
 }
+@{
+    string name = TempData["name"].ToString();
+    string password = TempData["pass"].ToString();
+}
+
+@Html.Label(name)
+@Html.Label(password)
 
 <div class="jumbotron">
     <h1>ASP.NET</h1>

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using ContosoUniversity.DAL;
 using ContosoUniversity.Models;
+using ContosoUniversity.ViewModels;
 
 namespace ContosoUniversity.Controllers
 {
@@ -17,104 +18,28 @@ namespace ContosoUniversity.Controllers
         private SchoolContext db = new SchoolContext();
 
         // GET: Login
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await db.People.ToListAsync());
+            var viewModel = new LoginIndexData();
+            
+            //Select instructors and students, separate them into two
+            viewModel.Instructors = db.Instructors;
+            viewModel.Students = db.Students;
+
+            //Select from Person then split sort by discriminator (testing)
+            //viewModel.Instructors = db.People.OfType<Student>;
+            //viewModel.Students = db.People.OfType<Instructor>;
+
+            //To Test, Querying from the single combined table (TPH) instead of getting from two
+
+            return View(viewModel);
         }
 
-        // GET: Login/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult VerifyCredentials(LoginIndexData model)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Person person = await db.People.FindAsync(id);
-            if (person == null)
-            {
-                return HttpNotFound();
-            }
-            return View(person);
-        }
-
-        // GET: Login/Create
-        public ActionResult Create()
-        {
-            return View("Index");
-        }
-
-        // POST: Login/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,LastName,FirstMidName")] Person person)
-        {
-            if (ModelState.IsValid)
-            {
-                db.People.Add(person);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            return View(person);
-        }
-
-        // GET: Login/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Person person = await db.People.FindAsync(id);
-            if (person == null)
-            {
-                return HttpNotFound();
-            }
-            return View(person);
-        }
-
-        // POST: Login/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,LastName,FirstMidName")] Person person)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(person).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(person);
-        }
-
-        // GET: Login/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Person person = await db.People.FindAsync(id);
-            if (person == null)
-            {
-                return HttpNotFound();
-            }
-            return View(person);
-        }
-
-        // POST: Login/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Person person = await db.People.FindAsync(id);
-            db.People.Remove(person);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            TempData["name"] = model.name;
+            TempData["pass"] = model.password;
+            return RedirectToAction("Index", "Home" );
         }
 
         protected override void Dispose(bool disposing)

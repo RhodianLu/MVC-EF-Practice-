@@ -1,17 +1,84 @@
-﻿@{
+﻿@model ContosoUniversity.ViewModels.LoginIndexData
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br />
-<br />
-<br />
-@Html.Label("lblusername","Enter your assigned ID: ", new { })
 
-@Html.TextBox("username")<br />
-<br />
-@Html.Label("lblpassword","Enter your password: ")
+@*For development purposes and testing, to be removed at final version (shows the list of instructors and students*@
+@*Starting here*@
+<table class="table">
+    <tr>
+        <th>No.</th>
+        <th>Full Name</th>
+        <th>Position</th>
+    </tr>
+    @{int i = 1; }
 
-@Html.TextBox("password")<br />
+    @*Iterate for Instructors*@
+    @foreach (var item in Model.Instructors)
+    {
 
-Button to be added here
+        <tr>
+
+            <td>@i </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                Instructor
+            </td>
+        </tr>
+        i++;
+    }
+
+    @*Iterate for Students*@
+    @foreach (var item in Model.Students)
+    {
+
+        <tr>
+
+            <td>@i </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                Student
+            </td>
+        </tr>
+        i++;
+    }
+</table>
+@*Ends here*@
+
+@*UI Code begins here*@
+@* Html.BeginForm("action-name,"controller name"*@
+@using (Html.BeginForm("VerifyCredentials", "Login", FormMethod.Post))
+{
+    @*Html.Label("id","text inside",html css*@
+    @Html.Label("lblusername", "Enter your Last Name:", new { style = "margin-left:50px;" })
+
+    @*Html.Label("id","text inside",html css*@
+
+    @*@Html.TextBox("txtusername", "", new { style = "margin-left:50px;" })*@
+    @Html.TextBoxFor(model => model.name);
+    <br />
+    <br />
+    @*Html.Label("id","text inside",html css*@
+    @Html.Label("lblpassword", "Enter your password:", new { style = "margin-left:50px;margin-right:5px;" })
+
+    @*Html.Label("id","text inside",html css*@
+
+    @*@Html.TextBox("txtpassword", "", new { style = "margin-left:50px;" })*@
+    @Html.TextBoxFor(model => model.password);
+    <br />
+    <br />
+
+    <label for="name"></label>
+    <label for="password"></label>
+
+
+    <input type="submit" style="margin-left:50px;" />
+}
+
+@*UI Code Ends here*@
 
 
